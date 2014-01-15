@@ -1,0 +1,11 @@
+REQUIREMENTS
+============
+
+To build the source code, it is recommended to use this tools:
+
+- Qt Creator 3.0.
+- Qt libraries 5.2.
+- CFITSIO library 3.3.
+
+It can build in Linux, OSX and Windows.
+

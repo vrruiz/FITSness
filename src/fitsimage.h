@@ -12,6 +12,7 @@ typedef struct
     float max;
     float average;
     float stdDev;
+    float mode;
 } ImageStatistics;
 
 class FitsImage : public QObject

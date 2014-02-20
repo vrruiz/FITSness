@@ -6,6 +6,7 @@
 #include "cfitsio/fitsio.h"
 #include "histogram.h"
 #include "fitsimage.h"
+#include "dialogshowheaders.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +22,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    DialogShowHeaders *dialogShowHeaders;
 
 protected:
     FitsImage fitsImage;
@@ -32,10 +34,12 @@ protected:
 
     void readAndShowImage(const QString &path);
     void showImage();
+    void showStats(long x, long y);
     bool eventFilter(QObject* watched, QEvent* event);
 
 public slots:
     void actionFileOpen();
+    void actionShowHeaders();
     void actionSlideChange();
     void actionZoom();
 };

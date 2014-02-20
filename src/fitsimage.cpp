@@ -13,6 +13,7 @@ FitsImage::FitsImage(QObject *parent) :
     stat.stdDev = 0.0;
     stat.min = 0.0;
     stat.max = 0.0;
+    stat.mode = 0.0;
     dimension = 0;
 }
 
@@ -43,11 +44,12 @@ bool FitsImage::read(const QString path)
     }
 
     // Generate statistics
-    double sum = 0.0;
-    double min = 0.0;
-    double max = 0.0;
-    double average = 0.0;
-    double stddev = 0.0;
+    float sum = 0.0;
+    float min = 0.0;
+    float max = 0.0;
+    float average = 0.0;
+    float stddev = 0.0;
+    float mode = 0.0;
 
     // Init histogram values
     MonoHistogram histogram;

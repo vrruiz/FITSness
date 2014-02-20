@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/new/Resources">
         <file>resources/document_alt_stroke_18x24.png</file>
+        <file>resources/list_24x21.png</file>
     </qresource>
 </RCC>

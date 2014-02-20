@@ -14,11 +14,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     histogram.cpp \
-    fitsimage.cpp
+    fitsimage.cpp \
+    dialogshowheaders.cpp
 
 HEADERS  += mainwindow.h \
     histogram.h \
-    fitsimage.h
+    fitsimage.h \
+    dialogshowheaders.h
 
 win32: HEADERS += cfitsio/longnam.h cfitsio/fitsio.h
 win32: LIBS += -L$$PWD/cfitsio/ -lcfitsio
@@ -28,5 +30,6 @@ win32: DEPENDPATH += $$PWD/cfitsio
 macx: INCLUDEPATH += /opt/local/include/
 macx: LIBS += -L/opt/local/lib/ -lcfitsio
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    dialogshowheaders.ui
 RESOURCES = images.qrc

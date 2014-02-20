@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dialogshowheaders.h"
 
 #include <math.h>
 #include <QEvent>
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addToolBar(Qt::LeftToolBarArea, ui->mainToolBar);
     showMaximized();
 
+    dialogShowHeaders = NULL;
     zoomFactor = 1;
     imageLoaded = false;
 
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if (dialogShowHeaders) delete dialogShowHeaders;
     delete ui;
 }
 
@@ -51,23 +54,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         }
 
         // Show stats
-        long counts = fitsImage.pixel(x,y);
-        QRgb rgb = image.pixel(QPoint(x, y));
-        QColor color(rgb);
-        long color_value = color.red();
-        ui->imageLabel->setText(QString("Size: %1 x %2\nX, Y: %3,%4\nCounts: %5\nColor: %6\n\n"
-                                        "Min: %7\nMax: %8\nAverage: %9\nStd. dev: %10")
-                                .arg(QString::number(fitsImage.size.width()))
-                                .arg(QString::number(fitsImage.size.height()))
-                                .arg(QString::number(x))
-                                .arg(QString::number(y))
-                                .arg(QString::number(counts))
-                                .arg(QString::number(color_value))
-                                .arg(QString::number(fitsImage.stat.min, 'f', 0))
-                                .arg(QString::number(fitsImage.stat.max, 'f', 0))
-                                .arg(QString::number(fitsImage.stat.average, 'f', 0))
-                                .arg(QString::number(fitsImage.stat.stdDev, 'f', 0))
-                                );
+        showStats(x, y);
     }
     return false;
 }
@@ -77,6 +64,7 @@ void MainWindow::readAndShowImage(const QString &path)
     if (fitsImage.read(path)) {
         imageLoaded = true;
         showImage();
+        showStats(0,0);
         ui->statusBar->showMessage(filePath);
         ui->sliderMax->setValue(ui->sliderMax->maximum());
         ui->sliderMin->setValue(ui->sliderMin->minimum());
@@ -98,6 +86,29 @@ void MainWindow::showImage()
     ui->histogram->setHistogram(&fitsImage.monoHistogram);
 }
 
+void MainWindow::showStats(long x, long y)
+{
+    if (imageLoaded) {
+        // Show stats
+        long counts = fitsImage.pixel(x,y);
+        QRgb rgb = image.pixel(QPoint(x, y));
+        QColor color(rgb);
+        long color_value = color.red();
+        ui->imageLabel->setText(QString("Size: %1 x %2\nX, Y: %3,%4\nCounts: %5\nColor: %6\n\n"
+                                        "Min: %7\nMax: %8\nAverage: %9\nStd. dev: %10")
+                                .arg(QString::number(fitsImage.size.width()))
+                                .arg(QString::number(fitsImage.size.height()))
+                                .arg(QString::number(x))
+                                .arg(QString::number(y))
+                                .arg(QString::number(counts))
+                                .arg(QString::number(color_value))
+                                .arg(QString::number(fitsImage.stat.min, 'f', 0))
+                                .arg(QString::number(fitsImage.stat.max, 'f', 0))
+                                .arg(QString::number(fitsImage.stat.average, 'f', 0))
+                                .arg(QString::number(fitsImage.stat.stdDev, 'f', 0))
+                                );
+    }
+}
 
 void MainWindow::actionFileOpen()
 {
@@ -105,6 +116,18 @@ void MainWindow::actionFileOpen()
     if (!path.isEmpty()) {
         filePath = path;
         readAndShowImage(filePath);
+    }
+}
+
+void MainWindow::actionShowHeaders()
+{
+    if (!imageLoaded) return; // No image to display
+    if (dialogShowHeaders == NULL) {
+        dialogShowHeaders = new DialogShowHeaders(this);
+        dialogShowHeaders->setHeaders(fitsImage.headers);
+        dialogShowHeaders->show();
+    } else {
+        dialogShowHeaders->raise();
     }
 }
 

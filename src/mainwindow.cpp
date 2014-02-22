@@ -127,6 +127,7 @@ void MainWindow::actionShowHeaders()
         dialogShowHeaders->setHeaders(fitsImage.headers);
         dialogShowHeaders->show();
     } else {
+        dialogShowHeaders->show();
         dialogShowHeaders->raise();
     }
 }

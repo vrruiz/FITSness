@@ -2,7 +2,7 @@
 #define DIALOGSHOWHEADERS_H
 
 #include <QDialog>
-#include <QStringListModel>
+#include <QStandardItemModel>
 
 namespace Ui {
 class DialogShowHeaders;
@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::DialogShowHeaders *ui;
-    QStringListModel *model;
+    QStandardItemModel *model;
 };
 
 #endif // DIALOGSHOWHEADERS_H
